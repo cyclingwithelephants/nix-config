@@ -48,7 +48,7 @@ build: up
 	$(COMPOSE) exec $(SERVICE) nix build
 
 build-turmeric: up
-	$(COMPOSE) exec $(SERVICE) sh -c "SKIP_SANITY_CHECKS=1 nix-shell -p home-manager --command 'home-manager switch --flake /workspace#turmeric'"
+	$(COMPOSE) exec $(SERVICE) nixos-rebuild switch --flake /workspace#turmeric-aarch64-linux
 
 ## Show this help
 help:

@@ -1,13 +1,9 @@
-# This file is a Nix expression that exports a function.
-# When imported, it expects an attribute set containing `pkgs` (usually Nixpkgs),
-# and returns a Nix list of package derivations.
-{pkgs}:
-# `with pkgs;` brings every attribute of `pkgs` into the current scope.
-# Instead of writing `pkgs.git`, you can just write `git`.
-with pkgs;
-# Nix lists are defined with square brackets and whitespace-separated elements.
-  [
-    # Each symbol here refers to a derivation provided by Nixpkgs.
+{
+  pkgs,
+  lib,
+  ...
+}: {
+  environment.systemPackages = with pkgs; [
     ansible # Configuration management tool
     argocd # GitOps continuous delivery
     asciiquarium # ASCII-art aquarium screensaver
@@ -51,6 +47,7 @@ with pkgs;
     ripgrep # Fast text search
     rustc # Rust compiler
     rustfmt # Rust code formatter
+    rustup # Rust
     speedtest-cli # Internet speed test
     tailscale # Zero-config VPN
     terraform-docs # Docs generator for Terraform modules
@@ -63,4 +60,5 @@ with pkgs;
     wget # Download files via HTTP
     yq # YAML processor
     zoxide # Intelligent `cd` replacement
-  ]
+  ];
+}
