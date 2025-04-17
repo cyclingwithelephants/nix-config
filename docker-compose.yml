@@ -1,0 +1,36 @@
+services:
+  dev:
+    image: nixos/nix:latest # Official image with the Nix package manager pre‑installed
+#    platform: linux/amd64 # force the x86_64 (amd64) variant of the nixos/nix image
+    container_name: nix-dev
+
+    # Run as *your* UID/GID so files you edit remain owned by you
+#    user: "${UID:-1000}:${GID:-1000}"
+
+    # Share code and give the container its own persistent /nix store
+    working_dir: /workspace
+    volumes:
+      - .:/workspace                 # project source
+      - nix_store:/nix               # cache Nix downloads/builds
+
+    # Enable modern CLI + flakes
+    environment:
+      - NIX_CONFIG=experimental-features = nix-command flakes
+      - HOME=/workspace              # treat /workspace as the “home” directory
+      - XDG_CONFIG_HOME=/workspace/.config
+
+    tty: true                        # keeps colours & ctrl‑c working
+    # 1. Ensure .config exists
+    # 2. Install & activate your Linux Home‑Manager config
+    # 3. Sleep so the container stays up for interactive use
+    command: >
+      sh -c '
+        # 1) Ensure Home‑Manager can write its state
+        mkdir -p /workspace/.config &&
+
+        # 3) Keep the container alive for interactive work
+        sleep infinity
+      '
+
+volumes:
+  nix_store: {}
